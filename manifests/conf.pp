@@ -33,8 +33,8 @@ define awstats::conf (
     'LogFile'      => '/var/log/httpd/access_log',
     'LogFormat'    => '1',
     'DirData'      => '/var/lib/awstats',
-    'SiteDomain'   => $::fqdn,
-    'HostAliases'  => "localhost 127.0.0.1 ${::hostname}",
+    'SiteDomain'   => fact('networking.fqdn'),
+    'HostAliases'  => "localhost 127.0.0.1 ${fact('networking.hostname')}",
   }
 
   $conf_options = merge($default_options, $options)
