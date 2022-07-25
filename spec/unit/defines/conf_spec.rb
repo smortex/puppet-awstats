@@ -6,10 +6,16 @@ describe 'awstats::conf', type: :define do
   context 'on osfamily RedHat' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystemmajrelease: '6',
-        fqdn: 'foo.example.org',
-        hostname: 'foo',
+        os: {
+          family: 'RedHat',
+          release: {
+            major: '6',
+          },
+        },
+        neworking: {
+          fqdn: 'foo.example.org',
+          hostname: 'foo',
+        },
       }
     end
     let(:title) { 'foo.example.org' }
@@ -51,7 +57,7 @@ describe 'awstats::conf', type: :define do
         let(:params) { { template: [] } }
 
         it 'fails' do
-          is_expected.to raise_error(Puppet::Error, %r{is not a string})
+          is_expected.to raise_error(Puppet::Error, %r{expects a value of type Undef or String, got Array})
         end
       end
     end
@@ -143,7 +149,7 @@ describe 'awstats::conf', type: :define do
         let(:params) { { options: 'foo' } }
 
         it 'fails' do
-          is_expected.to raise_error(Puppet::Error, %r{is not a Hash})
+          is_expected.to raise_error(Puppet::Error, %r{expects a Hash value, got String})
         end
       end
     end

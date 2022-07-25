@@ -70,7 +70,7 @@ describe 'awstats', type: :class do
             let(:params) { { config_dir_purge: 42 } }
 
             it 'fails' do
-              is_expected.to raise_error(Puppet::Error, %r{is not a boolean})
+              is_expected.to raise_error(Puppet::Error, %r{expects a Boolean value, got Integer})
             end
           end
         end
@@ -86,10 +86,7 @@ describe 'awstats', type: :class do
               it { is_expected.to contain_package('perl-URI') }
             end
 
-            it do
-              is_expected.to contain_class('awstats::plugin::decodeutfkeys').
-                that_comes_before('Anchor[awstats::end]')
-            end
+            it { is_expected.to contain_class('awstats::plugin::decodeutfkeys') }
           end
 
           context "[ 'geoip' ]" do
@@ -102,10 +99,7 @@ describe 'awstats', type: :class do
               it { is_expected.to contain_package('perl-Geo-IP') }
             end
 
-            it do
-              is_expected.to contain_class('awstats::plugin::geoip').
-                that_comes_before('Anchor[awstats::end]')
-            end
+            it { is_expected.to contain_class('awstats::plugin::geoip') }
           end
 
           # check case insensitivity and multiple enable_plugins
@@ -126,7 +120,7 @@ describe 'awstats', type: :class do
             let(:params) { { enable_plugins: 42 } }
 
             it 'fails' do
-              is_expected.to raise_error(Puppet::Error, %r{is not an Array})
+              is_expected.to raise_error(Puppet::Error, %r{expects an Array value, got Integer})
             end
           end
         end
@@ -136,9 +130,12 @@ describe 'awstats', type: :class do
     context 'el5.x' do
       let(:facts) do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemmajrelease: '5',
+          os: {
+            family: 'RedHat',
+            release: {
+              major: '5'
+            },
+          },
         }
       end
 
@@ -150,9 +147,12 @@ describe 'awstats', type: :class do
     context 'el8.x' do
       let(:facts) do
         {
-          osfamily: 'RedHat',
-          operatingsystem: 'RedHat',
-          operatingsystemmajrelease: '8',
+          os: {
+            family: 'RedHat',
+            release: {
+              major: '8',
+            },
+          },
         }
       end
 
@@ -163,7 +163,13 @@ describe 'awstats', type: :class do
   end
 
   context 'on osfamily Solaris' do
-    let(:facts) { { osfamily: 'Solaris', operatingsystem: 'Solaris' } }
+    let(:facts) do
+      {
+        os: {
+          family: 'Solaris',
+        }
+      }
+    end
 
     it 'fails' do
       is_expected.to raise_error Puppet::Error, %r{not supported on Solaris}
