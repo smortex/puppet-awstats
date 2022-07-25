@@ -144,20 +144,20 @@ describe 'awstats', type: :class do
       end
     end
 
-    context 'el8.x' do
+    context 'el9.x' do
       let(:facts) do
         {
           os: {
             family: 'RedHat',
             release: {
-              major: '8',
+              major: '9',
             },
           },
         }
       end
 
       it 'fails' do
-        is_expected.to raise_error(Puppet::Error, %r{not supported on operatingsystemmajrelease 8})
+        is_expected.to raise_error(Puppet::Error, %r{not supported on operatingsystemmajrelease 9})
       end
     end
   end
